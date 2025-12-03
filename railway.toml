@@ -1,2 +1,5 @@
 [build]
 composerArgs = ["--no-dev", "--optimize-autoloader"]
+
+[php]
+version = "8.3"
