@@ -1,0 +1,77 @@
+/* default format */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* bootstrap fix */
+h1,
+h2,
+h3.h4,
+h5,
+h6 {
+    font-weight: bold;
+}
+
+/* page setup */
+body {
+    font-family: "Segoe UI";
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* header */
+.header {
+    padding: 20px 40px;
+    border-top: 8px solid #ffa51f;
+    border-bottom: 4px solid #000000;
+    background-color: #242424;
+    color: #ffffff;
+    width: 100%;
+}
+
+/* title */
+.title {
+    font-size: 2rem;
+    color: #ffa51f;
+}
+
+/* page links */
+.pages ul {
+    list-style-type: none;
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.pages a {
+    text-decoration: none;
+    color: #ffffff;
+    font-weight: 500;
+    padding: 5px 15px;
+}
+
+.pages a:hover {
+    color: #ffa51f;
+    border-bottom: 2px solid #ffa51f;
+}
+
+/* page content */
+.content {
+    flex: 1;
+    padding: 30px 50px;
+    width: 100%;
+}
+
+/* footer */
+.footer {
+    border-top: 4px solid #000000;
+    background-color: #242424;
+    text-align: center;
+    padding: 20px;
+    font-size: 1rem;
+    color: #ffffff;
+    width: 100%;
+}
