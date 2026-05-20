@@ -224,7 +224,10 @@ body {
 @media screen and (max-width: 480px) {
     .contact {
         padding: 16px;
-        min-height: 100vh;
+        min-height: auto;
+        align-items: flex-start;
+        padding-top: 32px;
+        padding-bottom: 32px;
     }
 
     .contact-card {
@@ -254,6 +257,8 @@ body {
 @media screen and (max-width: 360px) {
     .contact {
         padding: 12px;
+        padding-top: 24px;
+        padding-bottom: 24px;
     }
 
     .contact-card {
