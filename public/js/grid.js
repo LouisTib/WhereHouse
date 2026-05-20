@@ -125,8 +125,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function generateGrid() {
         gridCanvas.innerHTML = "";
-        gridCanvas.style.gridTemplateColumns = `repeat(${gridWidth}, 40px)`;
-        gridCanvas.style.gridTemplateRows = `repeat(${gridHeight}, 40px)`;
+
+        const cellSize =
+            window.innerWidth <= 768 ? 25 : window.innerWidth <= 1200 ? 35 : 40;
+
+        gridCanvas.style.gridTemplateColumns = `repeat(${gridWidth}, ${cellSize}px)`;
+        gridCanvas.style.gridTemplateRows = `repeat(${gridHeight}, ${cellSize}px)`;
 
         for (let y = 0; y < gridHeight; y++) {
             for (let x = 0; x < gridWidth; x++) {
@@ -134,6 +138,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 cell.classList.add("grid-cell");
                 cell.dataset.x = x;
                 cell.dataset.y = y;
+                cell.style.width = `${cellSize}px`;
+                cell.style.height = `${cellSize}px`;
                 cell.addEventListener("click", (e) => handleCellClick(e, x, y));
                 cell.addEventListener("dragover", (e) => handleDragOver(e));
                 cell.addEventListener("drop", (e) => handleDrop(e, x, y));
