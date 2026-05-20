@@ -1,40 +1,270 @@
-/* contact container to hold all the content */
+/* ===== VARIABLES & THEMING ===== */
+:root {
+    --primary: #ffa51f;
+    --primary-light: #ffb84d;
+    --primary-dark: #ff8c00;
+    --bg-dark: #1a1a1a;
+    --bg-darker: #0f0f0f;
+    --surface: #242424;
+    --surface-light: #2e2e2e;
+    --surface-lighter: #3a3a3a;
+    --text-primary: #ffffff;
+    --text-secondary: #b0b0b0;
+    --text-muted: #808080;
+    --border: #3a3a3a;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* ===== GLOBAL STYLES ===== */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background-color: var(--bg-darker);
+    color: var(--text-primary);
+}
+
+/* ===== CONTACT CONTAINER ===== */
 .contact {
-    margin-top: 30px;
-    padding: 30px;
-    border: 2px solid #242424;
-    border-radius: 8px;
-    background-color: #ffffff;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    background: linear-gradient(
+        135deg,
+        var(--bg-darker) 0%,
+        var(--bg-dark) 100%
+    );
+    position: relative;
 }
 
-/* contact page title */
+/* Dark overlay for better card contrast */
+.contact::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 15, 15, 0.55);
+    z-index: 0;
+}
+
+/* ===== CONTACT CARD ===== */
+.contact-card {
+    background: linear-gradient(
+        135deg,
+        var(--surface-light) 0%,
+        var(--surface) 100%
+    );
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    padding: 50px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.contact-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        circle at top right,
+        rgba(255, 165, 31, 0.1),
+        transparent
+    );
+    pointer-events: none;
+    border-radius: 12px;
+}
+
+/* ===== CONTACT CONTENT ===== */
+.contact-content {
+    position: relative;
+    z-index: 1;
+}
+
+/* ===== HEADINGS ===== */
 .contact h1 {
-    font-size: 2rem;
-    color: #242424;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin: 0 0 20px 0;
+    letter-spacing: -0.5px;
 }
 
-/* contact info */
+/* ===== DESCRIPTION ===== */
 .contact p {
-    margin-top: 10px;
-    font-size: 1.5rem;
-    color: #242424;
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin: 0 0 32px 0;
 }
 
-/* email button styling */
+/* ===== EMAIL BUTTON ===== */
 .contact a {
-    margin-top: 15px;
-    background-color: #ffa51f;
-    color: #242424;
-    padding: 10px 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--primary);
+    color: var(--bg-darker);
+    padding: 13px 30px;
     border-radius: 8px;
-    font-size: 1.2rem;
-    display: inline-block;
-    text-align: center;
+    font-size: 1.05rem;
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 700;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    cursor: pointer;
 }
 
-/* email button hover effect */
 .contact a:hover {
-    background-color: #ffb23e;
+    background-color: var(--primary-light);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(255, 165, 31, 0.3);
+}
+
+.contact a:active {
+    transform: translateY(0px);
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media screen and (min-width: 1025px) {
+    .contact {
+        background-image: url("images/ContactBackground.png");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .contact {
+        padding: 30px;
+        background: linear-gradient(
+            135deg,
+            var(--bg-darker) 0%,
+            var(--bg-dark) 100%
+        ) !important;
+        background-attachment: scroll !important;
+    }
+
+    .contact-card {
+        padding: 45px;
+        border-radius: 12px;
+    }
+
+    .contact h1 {
+        font-size: 2rem;
+        margin-bottom: 18px;
+    }
+
+    .contact p {
+        font-size: 1rem;
+        margin-bottom: 30px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .contact {
+        padding: 25px;
+    }
+
+    .contact-card {
+        padding: 40px;
+        border-radius: 12px;
+    }
+
+    .contact h1 {
+        font-size: 1.8rem;
+        margin-bottom: 16px;
+    }
+
+    .contact p {
+        font-size: 0.95rem;
+        margin-bottom: 28px;
+        line-height: 1.6;
+    }
+
+    .contact a {
+        padding: 12px 28px;
+        font-size: 1rem;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .contact {
+        padding: 20px;
+    }
+
+    .contact-card {
+        padding: 32px;
+        border-radius: 10px;
+    }
+
+    .contact h1 {
+        font-size: 1.6rem;
+        margin-bottom: 14px;
+    }
+
+    .contact p {
+        font-size: 0.9rem;
+        margin-bottom: 24px;
+    }
+
+    .contact a {
+        padding: 11px 26px;
+        font-size: 0.95rem;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .contact {
+        padding: 16px;
+        min-height: 100vh;
+    }
+
+    .contact-card {
+        padding: 28px;
+        border-radius: 10px;
+    }
+
+    .contact h1 {
+        font-size: 1.5rem;
+        margin-bottom: 12px;
+    }
+
+    .contact p {
+        font-size: 0.85rem;
+        margin-bottom: 20px;
+        line-height: 1.5;
+    }
+
+    .contact a {
+        width: 100%;
+        justify-content: center;
+        padding: 11px 20px;
+        font-size: 0.9rem;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .contact {
+        padding: 12px;
+    }
+
+    .contact-card {
+        padding: 24px;
+    }
+
+    .contact h1 {
+        font-size: 1.4rem;
+    }
+
+    .contact p {
+        font-size: 0.8rem;
+    }
 }
