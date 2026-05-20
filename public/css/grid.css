@@ -72,7 +72,8 @@
 }
 
 .btn-back,
-.btn-share {
+.btn-share,
+.btn-resize {
     padding: 8px 15px;
     border-radius: 6px;
     font-size: 0.9rem;
@@ -100,6 +101,16 @@
 
 .btn-share:hover {
     background-color: #3a8eef;
+}
+
+.btn-resize {
+    background-color: #ffa51f;
+    color: #1a1a1a;
+    font-weight: bold;
+}
+
+.btn-resize:hover {
+    background-color: #ffb84d;
 }
 
 /* Search Container */
@@ -267,7 +278,6 @@
 .btn-add-product:hover {
     background-color: #00aa00;
 }
-
 .btn-delete-section:hover {
     background-color: #ff0000;
 }
@@ -319,11 +329,9 @@
 .btn-edit-product:hover {
     color: #4a9eff;
 }
-
 .btn-delete-product {
     font-size: 1.2rem;
 }
-
 .btn-delete-product:hover {
     color: #ff0000;
 }
@@ -338,8 +346,7 @@
 
 .grid-canvas {
     display: grid;
-    grid-template-columns: repeat(30, 40px);
-    grid-template-rows: repeat(20, 40px);
+    /* grid-template-columns and grid-template-rows are set dynamically by grid.js */
     gap: 0;
     background-color: #242424;
     border: 2px solid #444;
@@ -407,7 +414,6 @@
 .grid-cell.dragging {
     opacity: 0.5;
 }
-
 .grid-cell.available-drop {
     background-color: #2a4a2a;
     border-color: #00ff00;
@@ -418,15 +424,12 @@
     background-color: #2e2e2e;
     color: #ffffff;
 }
-
 .modal-header {
     border-bottom: 1px solid #ffa51f;
 }
-
 .modal-title {
     color: #ffa51f;
 }
-
 .modal-body .form-label {
     color: #ffa51f;
 }
@@ -450,7 +453,6 @@
     margin-top: 10px;
     margin-bottom: 0;
 }
-
 .modal-footer {
     border-top: 1px solid #444;
 }
@@ -480,18 +482,16 @@
     background-color: #ffb84d;
 }
 
-/* Share Modal Specific Styles */
+/* Share Modal */
 .shared-users-title {
     color: #ffa51f;
     font-size: 1rem;
     margin-bottom: 10px;
 }
-
 .shared-users-list {
     max-height: 300px;
     overflow-y: auto;
 }
-
 .loading-users {
     color: #888;
     font-style: italic;
@@ -512,13 +512,11 @@
 .shared-user-info {
     flex: 1;
 }
-
 .shared-user-name {
     color: #ffffff;
     font-weight: bold;
     font-size: 0.9rem;
 }
-
 .shared-user-email {
     color: #aaa;
     font-size: 0.8rem;
@@ -538,7 +536,6 @@
 .btn-remove-user:hover {
     background-color: #ff0000;
 }
-
 .no-shared-users {
     color: #888;
     font-style: italic;
@@ -546,17 +543,11 @@
     padding: 20px;
 }
 
-/* Responsive Design */
+/* Responsive */
 @media screen and (max-width: 1200px) {
     .sidebar {
         width: 300px;
     }
-
-    .grid-canvas {
-        grid-template-columns: repeat(30, 35px);
-        grid-template-rows: repeat(20, 35px);
-    }
-
     .grid-cell {
         width: 35px;
         height: 35px;
@@ -567,31 +558,22 @@
     .grid-container {
         flex-direction: column;
     }
-
     .sidebar {
         width: 100%;
         max-height: 60vh;
     }
-
     .header-buttons {
         justify-content: space-between;
     }
-
     .btn-back,
-    .btn-share {
+    .btn-share,
+    .btn-resize {
         flex: 1;
         text-align: center;
     }
-
     .grid-area {
         padding: 10px;
     }
-
-    .grid-canvas {
-        grid-template-columns: repeat(30, 25px);
-        grid-template-rows: repeat(20, 25px);
-    }
-
     .grid-cell {
         width: 25px;
         height: 25px;
