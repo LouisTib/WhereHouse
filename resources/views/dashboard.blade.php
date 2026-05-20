@@ -13,23 +13,42 @@
 
     <div class="dashboard">
 
-        <div class="dashboard-right">
-            <a href="{{ route('profile.edit') }}">
-                <button type="button">Profile</button>
-            </a>
+        <!-- Header with Actions -->
+        <div class="dashboard-header-actions">
+            <div class="dashboard-left">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createWarehouseModal">
+                    + Create Warehouse
+                </button>
+            </div>
+
+            <div class="dashboard-right">
+                <a href="{{ route('profile.edit') }}">
+                    <button type="button">Profile</button>
+                </a>
+                <form method="POST" action="{{ route('logout') }}" style="margin: 0;">
+                    @csrf
+                    <button type="submit">Log Out</button>
+                </form>
+            </div>
         </div>
 
-        <div class="dashboard-right">
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit">Log Out</button>
-            </form>
-        </div>
+        <!-- Warehouse Sections Container -->
+        <div class="warehouse-sections-container">
+            <!-- My Warehouses Section -->
+            <div class="warehouse-section">
+                <h3 class="section-title">My Warehouses</h3>
+                <div class="warehouse-list" id="myWarehouses">
+                    <!-- My warehouses will be loaded here by JavaScript -->
+                </div>
+            </div>
 
-        <div class="dashboard-left">
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createWarehouseModal">
-                Create Warehouse
-            </button>
+            <!-- Shared Warehouses Section -->
+            <div class="warehouse-section">
+                <h3 class="section-title">Shared With Me</h3>
+                <div class="warehouse-list" id="sharedWarehouses">
+                    <!-- Shared warehouses will be loaded here by JavaScript -->
+                </div>
+            </div>
         </div>
 
     </div>
@@ -48,27 +67,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="createWarehouseBtn">Create</button>
+                    <button type="button" class="btn btn-primary" id="createWarehouseBtn">Create Warehouse</button>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Warehouse Sections Container -->
-    <div class="warehouse-sections-container">
-        <!-- My Warehouses Section -->
-        <div class="warehouse-section">
-            <h3 class="section-title">My Warehouses</h3>
-            <div class="warehouse-list my-warehouses" id="myWarehouses">
-                <!-- My warehouses will be loaded here by JavaScript -->
-            </div>
-        </div>
-
-        <!-- Shared Warehouses Section -->
-        <div class="warehouse-section">
-            <h3 class="section-title">Shared With Me</h3>
-            <div class="warehouse-list shared-warehouses" id="sharedWarehouses">
-                <!-- Shared warehouses will be loaded here by JavaScript -->
             </div>
         </div>
     </div>

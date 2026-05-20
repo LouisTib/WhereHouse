@@ -24,13 +24,18 @@ document.addEventListener("DOMContentLoaded", function () {
         if (isOwned) {
             const deleteBtn = document.createElement("button");
             deleteBtn.classList.add("delete-warehouse-btn");
-            deleteBtn.textContent = "x";
+            deleteBtn.textContent = "×";
             deleteBtn.dataset.id = warehouse.id;
+            deleteBtn.setAttribute("aria-label", "Delete warehouse");
             newDiv.appendChild(deleteBtn);
         } else {
             // Add shared indicator
             newDiv.classList.add("shared");
         }
+
+        // Add staggered animation
+        newDiv.style.animation = `slideInUp 0.4s ease-out forwards`;
+        newDiv.style.opacity = "0";
 
         return newDiv;
     }
@@ -70,11 +75,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
                             // Add owned warehouses
                             if (ownedWarehouses.length > 0) {
-                                ownedWarehouses.forEach((warehouse) => {
+                                ownedWarehouses.forEach((warehouse, index) => {
                                     const warehouseBox = addWarehouseBox(
                                         warehouse,
-                                        true
+                                        true,
                                     );
+                                    warehouseBox.style.animationDelay = `${index * 0.05}s`;
                                     myWarehousesList.appendChild(warehouseBox);
                                 });
                             } else {
@@ -84,13 +90,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
                             // Add shared warehouses
                             if (sharedWarehouses.length > 0) {
-                                sharedWarehouses.forEach((warehouse) => {
+                                sharedWarehouses.forEach((warehouse, index) => {
                                     const warehouseBox = addWarehouseBox(
                                         warehouse,
-                                        false
+                                        false,
                                     );
+                                    warehouseBox.style.animationDelay = `${index * 0.05}s`;
                                     sharedWarehousesList.appendChild(
-                                        warehouseBox
+                                        warehouseBox,
                                     );
                                 });
                             } else {
@@ -101,20 +108,48 @@ document.addEventListener("DOMContentLoaded", function () {
                         .catch((error) => {
                             console.error("Error getting user data:", error);
                             // Fallback: show all warehouses in "My Warehouses"
-                            data.warehouses.forEach((warehouse) => {
+                            data.warehouses.forEach((warehouse, index) => {
                                 const warehouseBox = addWarehouseBox(
                                     warehouse,
-                                    true
+                                    true,
                                 );
+                                warehouseBox.style.animationDelay = `${index * 0.05}s`;
                                 myWarehousesList.appendChild(warehouseBox);
                             });
                         });
                 }
             })
             .catch((error) =>
-                console.error("Error loading warehouses:", error)
+                console.error("Error loading warehouses:", error),
             );
     }
+
+    // Add animation keyframes dynamically
+    const style = document.createElement("style");
+    style.textContent = `
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: scale(1);
+            }
+            to {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+        }
+    `;
+    document.head.appendChild(style);
 
     // Initially load existing warehouses
     loadWarehouses();
@@ -133,29 +168,40 @@ document.addEventListener("DOMContentLoaded", function () {
             if (!confirm("Are you sure you want to delete this warehouse?"))
                 return;
 
-            // Immediately remove the warehouse box from the UI
-            deleteBtn.parentElement.remove();
+            // Animate out the warehouse box
+            const warehouseBox = deleteBtn.parentElement;
+            warehouseBox.style.animation = "fadeOut 0.3s ease-out forwards";
 
-            // Send delete request to the server
-            fetch(`/warehouses/${warehouseId}`, {
-                method: "DELETE",
-                headers: {
-                    "X-CSRF-TOKEN": csrfToken,
-                    "X-Requested-With": "XMLHttpRequest",
-                },
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    if (!data.success) {
+            // Send delete request to the server after animation
+            setTimeout(() => {
+                fetch(`/warehouses/${warehouseId}`, {
+                    method: "DELETE",
+                    headers: {
+                        "X-CSRF-TOKEN": csrfToken,
+                        "X-Requested-With": "XMLHttpRequest",
+                    },
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if (data.success) {
+                            warehouseBox.remove();
+
+                            // Check if no warehouses left and show empty state
+                            if (myWarehousesList.children.length === 0) {
+                                myWarehousesList.innerHTML =
+                                    '<p class="no-warehouses">No warehouses yet. Create one to get started!</p>';
+                            }
+                        } else {
+                            alert("Error deleting warehouse");
+                            loadWarehouses(); // Reload to restore
+                        }
+                    })
+                    .catch((error) => {
+                        console.error("Error:", error);
                         alert("Error deleting warehouse");
                         loadWarehouses(); // Reload to restore
-                    }
-                })
-                .catch((error) => {
-                    console.error("Error:", error);
-                    alert("Error deleting warehouse");
-                    loadWarehouses(); // Reload to restore
-                });
+                    });
+            }, 300);
         }
     });
 
@@ -166,6 +212,10 @@ document.addEventListener("DOMContentLoaded", function () {
             alert("Please enter a warehouse name.");
             return;
         }
+
+        // Disable button during submission
+        createBtn.disabled = true;
+        createBtn.textContent = "Creating...";
 
         // Send request to create new warehouse via AJAX
         fetch("/warehouses", {
@@ -181,7 +231,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (data.success) {
                     // Close modal
                     const modal = bootstrap.Modal.getInstance(
-                        document.getElementById("createWarehouseModal")
+                        document.getElementById("createWarehouseModal"),
                     );
                     modal.hide();
 
@@ -197,10 +247,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
                     myWarehousesList.appendChild(warehouseBox);
                     warehouseInput.value = ""; // Clear input
+
+                    // Reset button
+                    createBtn.disabled = false;
+                    createBtn.textContent = "Create Warehouse";
                 } else {
                     alert("Error: " + data.message);
+                    // Reset button
+                    createBtn.disabled = false;
+                    createBtn.textContent = "Create Warehouse";
                 }
             })
-            .catch((error) => console.error("Error:", error));
+            .catch((error) => {
+                console.error("Error:", error);
+                alert("Error creating warehouse");
+                // Reset button
+                createBtn.disabled = false;
+                createBtn.textContent = "Create Warehouse";
+            });
+    });
+
+    // Allow creating warehouse by pressing Enter in input field
+    warehouseInput.addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+            createBtn.click();
+        }
     });
 });
