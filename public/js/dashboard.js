@@ -11,9 +11,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const dashboardSearchInput = document.getElementById(
         "dashboardSearchInput",
     );
-    const dashboardClearSearch = document.getElementById(
-        "dashboardClearSearch",
-    );
 
     let searchTimeout = null;
 
@@ -264,18 +261,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     dashboardSearchInput.addEventListener("input", function () {
-        const query = dashboardSearchInput.value.trim().toLowerCase();
-
-        // Debounce so we don't fire on every keystroke
+        const query = dashboardSearchInput.value.trim();
         clearTimeout(searchTimeout);
         searchTimeout = setTimeout(() => performGlobalSearch(query), 300);
-
-        dashboardClearSearch.style.display = query.length > 0 ? "flex" : "none";
-    });
-
-    dashboardClearSearch.addEventListener("click", function () {
-        dashboardSearchInput.value = "";
-        dashboardClearSearch.style.display = "none";
-        clearWarehouseHighlights();
     });
 });

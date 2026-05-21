@@ -20,7 +20,6 @@
             <div class="dashboard-right">
                 <div class="dashboard-search-wrapper">
                     <input type="text" id="dashboardSearchInput" placeholder="Search products...">
-                    <button type="button" id="dashboardClearSearch">×</button>
                 </div>
                 <a href="{{ route('profile.edit') }}">
                     <button type="button">Profile</button>
