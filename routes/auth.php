@@ -56,4 +56,6 @@ Route::middleware('auth')->group(function () {
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
+
+    Route::get('/search/products', [App\Http\Controllers\ProductController::class, 'globalSearch']);
 });

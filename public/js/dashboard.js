@@ -8,6 +8,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const csrfToken = document
         .querySelector('meta[name="csrf-token"]')
         .getAttribute("content");
+    const dashboardSearchInput = document.getElementById(
+        "dashboardSearchInput",
+    );
+    const dashboardClearSearch = document.getElementById(
+        "dashboardClearSearch",
+    );
+
+    let searchTimeout = null;
 
     function addWarehouseBox(warehouse, isOwned = true) {
         const newDiv = document.createElement("div");
@@ -104,6 +112,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     loadWarehouses();
 
+    // ============ DELETE ============
+
     myWarehousesList.addEventListener("click", function (event) {
         if (!event.target.classList.contains("delete-warehouse-btn")) return;
 
@@ -141,6 +151,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
         }, 300);
     });
+
+    // ============ CREATE ============
 
     createBtn.addEventListener("click", function () {
         const warehouseName = warehouseInput.value.trim();
@@ -206,5 +218,64 @@ document.addEventListener("DOMContentLoaded", function () {
 
     warehouseInput.addEventListener("keypress", function (e) {
         if (e.key === "Enter") createBtn.click();
+    });
+
+    // ============ GLOBAL PRODUCT SEARCH ============
+
+    function clearWarehouseHighlights() {
+        document
+            .querySelectorAll(".warehouse-icon.search-highlighted")
+            .forEach((el) => {
+                el.classList.remove("search-highlighted");
+            });
+    }
+
+    function highlightWarehouses(warehouseIds) {
+        clearWarehouseHighlights();
+        warehouseIds.forEach((id) => {
+            const box = document.querySelector(
+                `.warehouse-icon[data-id="${id}"]`,
+            );
+            if (box) box.classList.add("search-highlighted");
+        });
+    }
+
+    function performGlobalSearch(query) {
+        if (query.length < 2) {
+            clearWarehouseHighlights();
+            return;
+        }
+
+        fetch(`/search/products?q=${encodeURIComponent(query)}`, {
+            headers: { Accept: "application/json" },
+        })
+            .then((r) => r.json())
+            .then((data) => {
+                if (data.products && data.products.length > 0) {
+                    const matchingWarehouseIds = [
+                        ...new Set(data.products.map((p) => p.warehouse_id)),
+                    ];
+                    highlightWarehouses(matchingWarehouseIds);
+                } else {
+                    clearWarehouseHighlights();
+                }
+            })
+            .catch((err) => console.error("Search error:", err));
+    }
+
+    dashboardSearchInput.addEventListener("input", function () {
+        const query = dashboardSearchInput.value.trim().toLowerCase();
+
+        // Debounce so we don't fire on every keystroke
+        clearTimeout(searchTimeout);
+        searchTimeout = setTimeout(() => performGlobalSearch(query), 300);
+
+        dashboardClearSearch.style.display = query.length > 0 ? "flex" : "none";
+    });
+
+    dashboardClearSearch.addEventListener("click", function () {
+        dashboardSearchInput.value = "";
+        dashboardClearSearch.style.display = "none";
+        clearWarehouseHighlights();
     });
 });

@@ -177,4 +177,34 @@ class ProductController extends Controller
             ], 500);
         }
     }
+
+    public function globalSearch(Request $request)
+    {
+        $query = $request->get('q', '');
+
+        if (strlen($query) < 2) {
+            return response()->json(['products' => []]);
+        }
+
+        $warehouseIds = auth()->user()->warehouses()->pluck('warehouses.id');
+
+        $products = \App\Models\Product::whereHas('section.warehouse', function ($q) use ($warehouseIds) {
+                $q->whereIn('id', $warehouseIds);
+            })
+            ->where(function ($q) use ($query) {
+                $q->where('product_name', 'LIKE', "%{$query}%")
+                ->orWhere('sku', 'LIKE', "%{$query}%");
+            })
+            ->with('section.warehouse')
+            ->limit(50)
+            ->get()
+            ->map(function ($product) {
+                return [
+                    'id'           => $product->id,
+                    'warehouse_id' => $product->section->warehouse->id,
+                ];
+            });
+
+        return response()->json(['products' => $products]);
+    }
 }

@@ -18,6 +18,10 @@
                 </button>
             </div>
             <div class="dashboard-right">
+                <div class="dashboard-search-wrapper">
+                    <input type="text" id="dashboardSearchInput" placeholder="Search products...">
+                    <button type="button" id="dashboardClearSearch">×</button>
+                </div>
                 <a href="{{ route('profile.edit') }}">
                     <button type="button">Profile</button>
                 </a>
@@ -46,7 +50,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="createWarehouseModalLabel">Create New Warehouse</h5>
+                    <h5 class="modal-title">Create New Warehouse</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
