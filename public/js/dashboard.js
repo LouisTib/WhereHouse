@@ -32,6 +32,35 @@ document.addEventListener("DOMContentLoaded", function () {
             deleteBtn.dataset.id = warehouse.id;
             deleteBtn.setAttribute("aria-label", "Delete warehouse");
             newDiv.appendChild(deleteBtn);
+
+            // Long press to delete on touch devices
+            let pressTimer = null;
+
+            newDiv.addEventListener(
+                "touchstart",
+                function (e) {
+                    pressTimer = setTimeout(() => {
+                        deleteBtn.style.opacity = "1";
+                    }, 600);
+                },
+                { passive: true },
+            );
+
+            newDiv.addEventListener(
+                "touchend",
+                function (e) {
+                    clearTimeout(pressTimer);
+                },
+                { passive: true },
+            );
+
+            newDiv.addEventListener(
+                "touchmove",
+                function (e) {
+                    clearTimeout(pressTimer);
+                },
+                { passive: true },
+            );
         } else {
             newDiv.classList.add("shared");
         }

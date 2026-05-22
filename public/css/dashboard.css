@@ -342,8 +342,10 @@ body {
     line-height: 1;
 }
 
-.warehouse-icon:hover .delete-warehouse-btn {
-    opacity: 1;
+@media (hover: hover) {
+    .warehouse-icon:hover .delete-warehouse-btn {
+        opacity: 1;
+    }
 }
 
 .delete-warehouse-btn:hover {
