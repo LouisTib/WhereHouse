@@ -338,6 +338,7 @@ body {
     justify-content: center;
     transition: all 0.2s ease;
     opacity: 0;
+    pointer-events: none;
     z-index: 10;
     line-height: 1;
 }
@@ -345,7 +346,30 @@ body {
 @media (hover: hover) {
     .warehouse-icon:hover .delete-warehouse-btn {
         opacity: 1;
+        pointer-events: auto;
     }
+}
+
+.warehouse-icon.touch-selected .delete-warehouse-btn {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.warehouse-icon.touch-selected {
+    border-color: var(--primary);
+    background: linear-gradient(
+        135deg,
+        var(--surface-lighter) 0%,
+        var(--surface-light) 100%
+    );
+    box-shadow:
+        0 12px 40px rgba(255, 165, 31, 0.2),
+        0 0 1px rgba(255, 165, 31, 0.5);
+    transform: translateY(-4px);
+}
+
+.warehouse-icon.touch-selected a {
+    color: var(--primary);
 }
 
 .delete-warehouse-btn:hover {
