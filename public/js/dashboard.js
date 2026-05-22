@@ -14,25 +14,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let searchTimeout = null;
 
-    function clearTouchSelected() {
-        document
-            .querySelectorAll(".warehouse-icon.touch-selected")
-            .forEach((el) => {
-                el.classList.remove("touch-selected");
-            });
-    }
-
-    // Tap anywhere outside a warehouse card to deselect
-    document.addEventListener(
-        "touchstart",
-        function (e) {
-            if (!e.target.closest(".warehouse-icon")) {
-                clearTouchSelected();
-            }
-        },
-        { passive: true },
-    );
-
     function addWarehouseBox(warehouse, isOwned = true) {
         const newDiv = document.createElement("div");
         newDiv.classList.add("warehouse-icon");
@@ -51,20 +32,6 @@ document.addEventListener("DOMContentLoaded", function () {
             deleteBtn.dataset.id = warehouse.id;
             deleteBtn.setAttribute("aria-label", "Delete warehouse");
             newDiv.appendChild(deleteBtn);
-
-            newDiv.addEventListener("touchend", function (e) {
-                // If the delete button itself was tapped, let the click handler take over
-                if (e.target.closest(".delete-warehouse-btn")) return;
-
-                e.preventDefault(); // prevent ghost click navigating via the <a>
-
-                const isSelected = newDiv.classList.contains("touch-selected");
-                clearTouchSelected();
-
-                if (!isSelected) {
-                    newDiv.classList.add("touch-selected");
-                }
-            });
         } else {
             newDiv.classList.add("shared");
         }
@@ -149,7 +116,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const deleteBtn = event.target;
         const warehouseId = deleteBtn.dataset.id;
-        clearTouchSelected();
         if (!confirm("Are you sure you want to delete this warehouse?")) return;
 
         const warehouseBox = deleteBtn.parentElement;
