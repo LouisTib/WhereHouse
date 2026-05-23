@@ -434,6 +434,13 @@ document.addEventListener("DOMContentLoaded", function () {
             .then((data) => {
                 if (data.success) {
                     sections.push(data.section);
+                    sections.sort((a, b) =>
+                        a.section_name.localeCompare(
+                            b.section_name,
+                            undefined,
+                            { numeric: true, sensitivity: "base" },
+                        ),
+                    );
                     renderSections();
                     renderSidebar();
                     cancelSectionCreation();
