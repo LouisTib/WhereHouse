@@ -695,22 +695,29 @@ document.addEventListener("DOMContentLoaded", function () {
     searchInput.addEventListener("input", function () {
         currentSearchTerm = searchInput.value.trim().toLowerCase();
         clearHighlights();
-        if (currentSearchTerm) performSearch(currentSearchTerm);
+        if (currentSearchTerm.length >= 2) performSearch(currentSearchTerm);
     });
 
     function performSearch(searchTerm) {
+        // Fetch all products for all sections in one go per section,
+        // but track which search term we started with to avoid stale results
+        const termAtStart = searchTerm;
+
         sections.forEach((section) => {
             fetch(`/warehouses/${warehouseId}/sections/${section.id}/products`)
                 .then((r) => r.json())
                 .then((data) => {
+                    // If the search term changed by the time this returns, ignore it
+                    if (currentSearchTerm !== termAtStart) return;
+
                     if (data.products) {
                         const match = data.products.some(
                             (p) =>
                                 p.product_name
                                     .toLowerCase()
-                                    .includes(searchTerm) ||
+                                    .includes(termAtStart) ||
                                 (p.sku &&
-                                    p.sku.toLowerCase().includes(searchTerm)),
+                                    p.sku.toLowerCase().includes(termAtStart)),
                         );
                         if (match) highlightSection(section.id);
                     }
