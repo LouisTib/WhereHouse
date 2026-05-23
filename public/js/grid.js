@@ -192,7 +192,13 @@ document.addEventListener("DOMContentLoaded", function () {
             .then((r) => r.json())
             .then((data) => {
                 if (data.sections) {
-                    sections = data.sections;
+                    sections = data.sections.sort((a, b) =>
+                        a.section_name.localeCompare(
+                            b.section_name,
+                            undefined,
+                            { numeric: true, sensitivity: "base" },
+                        ),
+                    );
                     renderSections();
                     renderSidebar();
                 }
