@@ -65,7 +65,11 @@ document.addEventListener("DOMContentLoaded", function () {
     let movingSectionMobile = null;
 
     function isMobile() {
-        return /Mobi|Android/i.test(navigator.userAgent);
+        return (
+            /Mobi|Android/i.test(navigator.userAgent) ||
+            (navigator.maxTouchPoints > 0 &&
+                !window.matchMedia("(hover: hover)").matches)
+        );
     }
 
     // ============ WAREHOUSE NAME EDITING ============
