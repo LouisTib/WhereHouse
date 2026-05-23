@@ -747,7 +747,6 @@ document.addEventListener("DOMContentLoaded", function () {
         );
         if (sidebarItem) {
             sidebarItem.classList.add("highlighted");
-            sidebarItem.scrollIntoView({ behavior: "smooth", block: "center" });
         }
     }
 
